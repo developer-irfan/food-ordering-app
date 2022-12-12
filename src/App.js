@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Navbar from "./components/Navbar/Navbar";
+import CartProvider from "./context/CartProvider";
+import Home from "./Pages/Home";
+import OrderFood from "./Pages/OrderFood";
 
-function App() {
+const App = () => {
+  //cart state
+  const [cartIsShown, setCartIsShown] = useState(false);
+
+  const showCartHandler = () => {
+    setCartIsShown(true);
+  };
+
+  const hideCartHandler = () => {
+    setCartIsShown(false);
+  };
+
+  //return
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CartProvider>
+      <Navbar onShowCart={showCartHandler} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/order"
+          element={
+            <OrderFood cartIsShown={cartIsShown} onHideCart={hideCartHandler} />
+          }
+        />
+      </Routes>
+    </CartProvider>
   );
-}
+};
 
 export default App;
